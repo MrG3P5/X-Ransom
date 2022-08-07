@@ -25,9 +25,16 @@ def banner(str):
 def decrypt_file(folder_path, key, extension_encrypted):
     fernet_key = Fernet(key)
     file_arr = []
+    
+    check_path = folder_path[-1]
+    
+    if check_path == "/":
+        folder_path = folder_path
+    else:
+        folder_path = folder_path + "/"
 
     for file in os.listdir(folder_path):
-        file = folder_path + "/" + file
+        file = folder_path + file
         if isfile(file):
             if extension_encrypted in file:
                 file_arr.append(file)
